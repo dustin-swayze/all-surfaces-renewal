@@ -10,8 +10,14 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-3">
           <div>
             <div className="flex items-center gap-2">
-              <span className="inline-block h-8 w-8 rounded-lg bg-brand" aria-hidden />
-              <span className="text-base font-bold text-brand">{siteConfig.name}</span>
+              {siteConfig.logoUrl ? (
+                <img src={siteConfig.logoUrl} alt={siteConfig.name} className="h-9 w-auto" />
+              ) : (
+                <>
+                  <span className="inline-block h-8 w-8 rounded-lg bg-brand" aria-hidden />
+                  <span className="text-base font-bold text-brand">{siteConfig.name}</span>
+                </>
+              )}
             </div>
             <p className="mt-3 max-w-xs text-sm text-slate-600">
               Professional bathtub, countertop, sink, and surface renewal — repair instead of replace.
@@ -51,6 +57,7 @@ export function Footer() {
                 </li>
               )}
               {siteConfig.serviceArea && <li>{siteConfig.serviceArea}</li>}
+              {siteConfig.hours && <li className="text-slate-500">{siteConfig.hours}</li>}
               {siteConfig.facebookUrl && (
                 <li>
                   <a

@@ -19,10 +19,20 @@ export function Navbar() {
     <header className="sticky top-0 z-40 w-full border-b border-surface-border bg-white/90 backdrop-blur">
       <div className="container-page flex h-16 items-center justify-between">
         <Link to="/" onClick={close} className="flex items-center gap-2">
-          <span className="inline-block h-8 w-8 rounded-lg bg-brand" aria-hidden />
-          <span className="text-sm font-bold leading-tight text-brand sm:text-base">
-            {siteConfig.name}
-          </span>
+          {siteConfig.logoUrl ? (
+            <img
+              src={siteConfig.logoUrl}
+              alt={siteConfig.name}
+              className="h-9 w-auto"
+            />
+          ) : (
+            <>
+              <span className="inline-block h-8 w-8 rounded-lg bg-brand" aria-hidden />
+              <span className="text-sm font-bold leading-tight text-brand sm:text-base">
+                {siteConfig.name}
+              </span>
+            </>
+          )}
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
