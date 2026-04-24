@@ -28,7 +28,12 @@ export interface GalleryItem {
   id: string;
   title: string;
   category: GalleryCategory;
-  beforeImage: string;
+  /**
+   * The "before" image path. Optional: omit for solo showcase photos
+   * (finished projects with no paired before shot). When omitted, the card
+   * renders a single full-width image with a "Finished" label.
+   */
+  beforeImage?: string;
   afterImage: string;
   description?: string;
 }
