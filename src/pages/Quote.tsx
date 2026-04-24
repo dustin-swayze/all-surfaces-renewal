@@ -1,8 +1,15 @@
 import { PageHeader } from '../components/PageHeader';
 import { QuoteForm } from '../components/QuoteForm';
 import { ContactInfo } from '../components/ContactInfo';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export function Quote() {
+  usePageMeta({
+    title: 'Get a Free Quote | All Surfaces Renewal and Repair',
+    description:
+      'Get a free, no-obligation quote for bathtub refinishing, countertop resurfacing, sink repair, or surface restoration. We respond within one business day.',
+  });
+
   return (
     <>
       <PageHeader

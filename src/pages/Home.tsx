@@ -4,11 +4,19 @@ import { ServiceCard } from '../components/ServiceCard';
 import { BeforeAfterCard } from '../components/BeforeAfterCard';
 import { ReviewCard } from '../components/ReviewCard';
 import { CTASection } from '../components/CTASection';
+import { StructuredData } from '../components/StructuredData';
 import { services } from '../data/services';
 import { galleryItems } from '../data/galleryItems';
 import { reviews } from '../data/reviews';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export function Home() {
+  usePageMeta({
+    title: 'All Surfaces Renewal and Repair — Bathtub, Countertop & Sink Refinishing | Tri-Cities',
+    description:
+      'Professional bathtub, tile, and countertop refinishing serving the Tri-Cities and surrounding areas. An affordable alternative to full replacement, backed by 11 years of experience.',
+  });
+
   const featuredServices = services.slice(0, 4);
   const featuredGallery = galleryItems.slice(0, 4);
   const featuredReviews = reviews.slice(0, 3);
@@ -16,6 +24,7 @@ export function Home() {
 
   return (
     <>
+      <StructuredData />
       <HeroSection />
 
       <section className="section">

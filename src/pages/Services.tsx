@@ -1,8 +1,15 @@
 import { PageHeader } from '../components/PageHeader';
 import { CTASection } from '../components/CTASection';
 import { services } from '../data/services';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export function Services() {
+  usePageMeta({
+    title: 'Our Services | All Surfaces Renewal and Repair',
+    description:
+      'Bathtub refinishing, countertop resurfacing, sink repair, and bathroom surface restoration. Affordable surface renewal that saves the cost and disruption of full replacement.',
+  });
+
   return (
     <>
       <PageHeader

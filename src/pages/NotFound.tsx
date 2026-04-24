@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export function NotFound() {
+  usePageMeta({
+    title: 'Page Not Found | All Surfaces Renewal and Repair',
+    description: 'The page you were looking for doesn\u2019t exist. Return home or request a free quote.',
+  });
+
   return (
     <section className="section">
       <div className="container-page text-center">

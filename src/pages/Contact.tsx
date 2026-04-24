@@ -1,8 +1,15 @@
 import { Link } from 'react-router-dom';
 import { PageHeader } from '../components/PageHeader';
 import { ContactInfo } from '../components/ContactInfo';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export function Contact() {
+  usePageMeta({
+    title: 'Contact Us | All Surfaces Renewal and Repair',
+    description:
+      'Contact All Surfaces Renewal and Repair. Call, email, or request a quote online. Serving the Tri-Cities and surrounding areas.',
+  });
+
   return (
     <>
       <PageHeader

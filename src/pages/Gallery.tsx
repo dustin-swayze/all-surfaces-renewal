@@ -4,6 +4,7 @@ import { GalleryGrid } from '../components/GalleryGrid';
 import { CTASection } from '../components/CTASection';
 import { galleryItems } from '../data/galleryItems';
 import type { GalleryCategory } from '../types';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 type FilterValue = 'all' | GalleryCategory;
 
@@ -17,6 +18,12 @@ const filters: { value: FilterValue; label: string }[] = [
 ];
 
 export function Gallery() {
+  usePageMeta({
+    title: 'Before & After Gallery | All Surfaces Renewal and Repair',
+    description:
+      'See real before-and-after projects: bathtub refinishing, countertop resurfacing, sink repair, and full bathroom restoration. Serving the Tri-Cities.',
+  });
+
   const [active, setActive] = useState<FilterValue>('all');
 
   const filtered = useMemo(() => {

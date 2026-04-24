@@ -3,8 +3,15 @@ import { PageHeader } from '../components/PageHeader';
 import { ReviewCard } from '../components/ReviewCard';
 import { CTASection } from '../components/CTASection';
 import { reviews } from '../data/reviews';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export function Reviews() {
+  usePageMeta({
+    title: 'Reviews | All Surfaces Renewal and Repair',
+    description:
+      'Customer testimonials and reviews for All Surfaces Renewal and Repair — bathtub, tile, and countertop refinishing in the Tri-Cities.',
+  });
+
   const hasReviews = reviews.length > 0;
 
   return (
