@@ -21,6 +21,8 @@ export function QuoteForm() {
   const [errorMessage, setErrorMessage] = useState('');
   // Honeypot field — real users won't fill this. If it's non-empty on submit,
   // silently treat the submission as success (so bots don't learn) but drop it.
+  // Uses Formspree's standard `_gotcha` name so Formspree also filters it
+  // server-side as a second layer of defense.
   const [honeypot, setHoneypot] = useState('');
 
   const update = <K extends keyof QuoteRequest>(key: K, value: QuoteRequest[K]) => {
@@ -60,13 +62,28 @@ export function QuoteForm() {
     }
 
     try {
+      // Build a Formspree-friendly payload. `_subject` sets the email subject,
+      // `_replyto` sets the Reply-To header so hitting "Reply" in the owner's
+      // inbox replies directly to the customer (only set when they supplied
+      // an email — Formspree ignores it if blank).
+      const payload: Record<string, string> = {
+        name: form.name,
+        phone: form.phone,
+        email: form.email || '',
+        serviceType: form.serviceType,
+        location: form.location || '',
+        description: form.description,
+        preferredContactMethod: form.preferredContactMethod,
+        _subject: `New quote request from ${form.name} (${form.phone})`,
+      };
+      if (form.email) {
+        payload._replyto = form.email;
+      }
+
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          ...form,
-          _subject: `New quote request from ${form.name}`,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -107,12 +124,15 @@ export function QuoteForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="card p-6 sm:p-8">
-      {/* Honeypot: hidden from real users with aria-hidden + CSS hiding. */}
+      {/* Honeypot: hidden from real users with aria-hidden + CSS hiding.
+          Uses Formspree's standard `_gotcha` name so their server also
+          filters it as a second line of defense. */}
       <div aria-hidden className="hidden">
         <label>
           Leave this field empty
           <input
             type="text"
+            name="_gotcha"
             tabIndex={-1}
             autoComplete="off"
             value={honeypot}

@@ -8,7 +8,7 @@ export function Quote() {
       <PageHeader
         eyebrow="Get a Free Quote"
         title="Tell us about your project"
-        description="Share a few details and we\u2019ll get back to you within one business day. Quotes are always free and no-obligation."
+        description="Share a few details and we’ll get back to you within one business day. Quotes are always free and no-obligation."
       />
 
       <section className="section">
