@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-surface text-slate-800 font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-brand tracking-tight;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold transition
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-light;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand text-white hover:bg-brand-dark shadow-card hover:shadow-hover;
+  }
+
+  .btn-accent {
+    @apply btn bg-accent text-white hover:bg-accent-dark shadow-card hover:shadow-hover;
+  }
+
+  .btn-secondary {
+    @apply btn border border-brand/20 bg-white text-brand hover:bg-surface-muted;
+  }
+
+  .card {
+    @apply rounded-2xl border border-surface-border bg-white shadow-card;
+  }
+
+  .section {
+    @apply py-16 sm:py-20;
+  }
+
+  .section-muted {
+    @apply bg-surface-muted;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-widest text-accent;
+  }
+
+  .input {
+    @apply block w-full rounded-lg border border-surface-border bg-white px-3 py-2.5 text-sm text-slate-800
+           shadow-sm transition placeholder:text-slate-400
+           focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20;
+  }
+}
