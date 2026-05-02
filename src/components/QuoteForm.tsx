@@ -1,6 +1,5 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { services } from '../data/services';
-import { siteConfig } from '../data/site';
 import type { QuoteRequest } from '../types';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
@@ -21,8 +20,6 @@ export function QuoteForm() {
   const [errorMessage, setErrorMessage] = useState('');
   // Honeypot field — real users won't fill this. If it's non-empty on submit,
   // silently treat the submission as success (so bots don't learn) but drop it.
-  // Uses Formspree's standard `_gotcha` name so Formspree also filters it
-  // server-side as a second layer of defense.
   const [honeypot, setHoneypot] = useState('');
 
   const update = <K extends keyof QuoteRequest>(key: K, value: QuoteRequest[K]) => {
@@ -48,42 +45,22 @@ export function QuoteForm() {
 
     setStatus('submitting');
 
-    const endpoint = siteConfig.formspreeEndpoint;
-
-    // If no endpoint is configured (e.g. local dev without secrets), fall back
-    // to logging the submission and showing a success message. This keeps the
-    // UX working while the Formspree endpoint is being set up.
-    if (!endpoint) {
-      // eslint-disable-next-line no-console
-      console.info('[QuoteForm] No VITE_FORMSPREE_ENDPOINT configured. Submission:', form);
-      setStatus('success');
-      setForm(initialForm);
-      return;
-    }
-
     try {
-      // Build a Formspree-friendly payload. `_subject` sets the email subject,
-      // `_replyto` sets the Reply-To header so hitting "Reply" in the owner's
-      // inbox replies directly to the customer (only set when they supplied
-      // an email — Formspree ignores it if blank).
-      const payload: Record<string, string> = {
-        name: form.name,
-        phone: form.phone,
-        email: form.email || '',
-        serviceType: form.serviceType,
-        location: form.location || '',
-        description: form.description,
-        preferredContactMethod: form.preferredContactMethod,
-        _subject: `New quote request from ${form.name} (${form.phone})`,
-      };
-      if (form.email) {
-        payload._replyto = form.email;
-      }
-
-      const response = await fetch(endpoint, {
+      // POST to our Vercel serverless function at /api/submit-quote.
+      // It saves the lead to the dashboard AND forwards to Formspree for
+      // email — all server-side so no secrets are exposed in the browser.
+      const response = await fetch('/api/submit-quote', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          email: form.email || '',
+          serviceType: form.serviceType,
+          location: form.location || '',
+          description: form.description,
+          preferredContactMethod: form.preferredContactMethod,
+        }),
       });
 
       if (!response.ok) {
@@ -94,7 +71,7 @@ export function QuoteForm() {
       setForm(initialForm);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Something went wrong.';
-      setErrorMessage(`We couldn\u2019t send your request. ${message}`);
+      setErrorMessage(`We couldn’t send your request. ${message}`);
       setStatus('error');
     }
   }
@@ -124,9 +101,7 @@ export function QuoteForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="card p-6 sm:p-8">
-      {/* Honeypot: hidden from real users with aria-hidden + CSS hiding.
-          Uses Formspree's standard `_gotcha` name so their server also
-          filters it as a second line of defense. */}
+      {/* Honeypot: hidden from real users with aria-hidden + CSS hiding. */}
       <div aria-hidden className="hidden">
         <label>
           Leave this field empty
