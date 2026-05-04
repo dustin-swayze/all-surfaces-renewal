@@ -69,9 +69,46 @@ before1.jpg / after1.jpg        (no category, ambiguous)
 - **Static paths don't need imports.** In JSX, writing `<img src="/images/gallery/foo.jpg" />` just works. No `import foo from '...'` required.
 - **TypeScript sees these as plain strings.** The `beforeImage` and `afterImage` fields in `GalleryItem` are typed `string`. TypeScript won't validate that the file actually exists — only the browser will catch a missing file, as a 404. Keep filenames and data entries in sync.
 
+## Image optimization
+
+Phone photos straight off a camera are typically 2-4 MB each. That's far too heavy for the web — affects Core Web Vitals, hurts SEO, and burns bandwidth. The full gallery folder was compressed in a one-time pass:
+
+- **Resized** to max 1600px on the longest side (preserves detail without bloat)
+- **Re-encoded** as JPEG at quality 82 (visually indistinguishable from the original)
+- **Auto-rotated** based on EXIF data (so portrait phone photos display correctly)
+- **Stripped** of EXIF metadata (smaller files + privacy)
+
+**Result:** 30 MB total → 4 MB total. 84% reduction with no visible quality loss.
+
+### How to compress new images
+
+When the business owner sends new photos, run them through the same pipeline before committing.
+
+**Option 1 — Manual via squoosh.app** (good for occasional adds):
+
+1. Go to https://squoosh.app
+2. Drag the photo in
+3. Pick **MozJPEG** as the output format, quality 82
+4. Click **Resize**, set width to 1600 (height auto-fills)
+5. Download, drop in `public/images/gallery/`
+
+**Option 2 — Command-line batch** (good for many photos at once):
+
+If you have ImageMagick installed (`brew install imagemagick` on Mac, comes with Git Bash on Windows):
+
+```bash
+cd public/images/gallery
+for img in *.jpg *.jpeg; do
+  convert "$img" -auto-orient -resize '1600x1600>' -quality 82 -strip "$img.tmp" && mv "$img.tmp" "$img"
+done
+```
+
+The `-resize '1600x1600>'` syntax means "shrink anything larger than 1600 in either dimension; leave smaller images alone." So running this multiple times is safe — already-small images aren't degraded.
+
 ## Future improvements
 
 - **Responsive image sizes.** For very high-traffic sites we'd generate multiple sizes per image and use `<picture>` / `srcset`. For a small-business site, one well-sized image per photo is plenty.
-- **Lightbox.** Click any card to view the full-size image in an overlay. Planned as a Milestone 4 polish item.
-- **Before/after slider.** An interactive drag-to-reveal slider instead of side-by-side. Also Milestone 4.
+- **WebP / AVIF format.** ~30% smaller than JPEG at equivalent quality. Tradeoff is slightly worse compatibility with very old browsers — fine for new builds, not worth the migration cost on existing files.
+- **Lightbox.** Click any card to view the full-size image in an overlay.
+- **Before/after slider.** An interactive drag-to-reveal slider instead of side-by-side.
 - **Admin upload dashboard.** Listed in the project brief's Future Features — requires a backend.
