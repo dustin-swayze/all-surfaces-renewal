@@ -1,6 +1,6 @@
 {
   "name": "all-surfaces-renewal",
-  "description": "Marketing website for All Surfaces Renewal and Repair — bathtub, countertop, sink, and bathroom surface refinishing.",
+  "description": "Marketing website for All Surfaces Renewal and Repair - bathtub, countertop, sink, and bathroom surface refinishing.",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0"

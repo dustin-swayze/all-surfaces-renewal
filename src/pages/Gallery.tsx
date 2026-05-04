@@ -2,19 +2,19 @@ import { useMemo, useState } from 'react';
 import { PageHeader } from '../components/PageHeader';
 import { GalleryGrid } from '../components/GalleryGrid';
 import { CTASection } from '../components/CTASection';
-import { galleryItems } from '../data/galleryItems';
+import { useGalleryItems } from '../hooks/useGalleryItems';
 import type { GalleryCategory } from '../types';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 type FilterValue = 'all' | GalleryCategory;
 
 const filters: { value: FilterValue; label: string }[] = [
-  { value: 'all', label: 'All' },
-  { value: 'bathtub', label: 'Bathtubs' },
+  { value: 'all',        label: 'All' },
+  { value: 'bathtub',    label: 'Bathtubs' },
   { value: 'countertop', label: 'Countertops' },
-  { value: 'sink', label: 'Sinks' },
-  { value: 'bathroom', label: 'Bathrooms' },
-  { value: 'repair', label: 'Repairs' },
+  { value: 'sink',       label: 'Sinks' },
+  { value: 'bathroom',   label: 'Bathrooms' },
+  { value: 'repair',     label: 'Repairs' },
 ];
 
 export function Gallery() {
@@ -25,11 +25,12 @@ export function Gallery() {
   });
 
   const [active, setActive] = useState<FilterValue>('all');
+  const { items, loading } = useGalleryItems();
 
   const filtered = useMemo(() => {
-    if (active === 'all') return galleryItems;
-    return galleryItems.filter((item) => item.category === active);
-  }, [active]);
+    if (active === 'all') return items;
+    return items.filter((item) => item.category === active);
+  }, [active, items]);
 
   return (
     <>
@@ -62,7 +63,18 @@ export function Gallery() {
             })}
           </div>
 
-          <GalleryGrid items={filtered} />
+          {loading ? (
+            <div className="grid gap-6 md:grid-cols-2">
+              {[1, 2, 3, 4].map((n) => (
+                <div
+                  key={n}
+                  className="h-64 animate-pulse rounded-xl bg-surface-muted"
+                />
+              ))}
+            </div>
+          ) : (
+            <GalleryGrid items={filtered} />
+          )}
         </div>
       </section>
 

@@ -6,21 +6,23 @@ import { ReviewCard } from '../components/ReviewCard';
 import { CTASection } from '../components/CTASection';
 import { StructuredData } from '../components/StructuredData';
 import { services } from '../data/services';
-import { galleryItems } from '../data/galleryItems';
 import { reviews } from '../data/reviews';
+import { useGalleryItems } from '../hooks/useGalleryItems';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export function Home() {
   usePageMeta({
-    title: 'All Surfaces Renewal and Repair — Bathtub, Countertop & Sink Refinishing | Tri-Cities',
+    title: 'All Surfaces Renewal and Repair - Bathtub, Countertop & Sink Refinishing | Tri-Cities',
     description:
       'Professional bathtub, tile, and countertop refinishing serving the Tri-Cities and surrounding areas. An affordable alternative to full replacement, backed by 11 years of experience.',
   });
 
   const featuredServices = services.slice(0, 4);
+  const featuredReviews  = reviews.slice(0, 3);
+  const hasReviews       = featuredReviews.length > 0;
+
+  const { items: galleryItems, loading: galleryLoading } = useGalleryItems();
   const featuredGallery = galleryItems.slice(0, 4);
-  const featuredReviews = reviews.slice(0, 3);
-  const hasReviews = featuredReviews.length > 0;
 
   return (
     <>
@@ -35,7 +37,7 @@ export function Home() {
               Expert surface repair and refinishing
             </h2>
             <p className="mt-3 text-slate-600">
-              We repair, refinish, and restore the surfaces you already own — from single chips to
+              We repair, refinish, and restore the surfaces you already own - from single chips to
               full bathroom refreshes.
             </p>
           </div>
@@ -67,9 +69,13 @@ export function Home() {
           </div>
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {featuredGallery.map((item) => (
-              <BeforeAfterCard key={item.id} item={item} />
-            ))}
+            {galleryLoading
+              ? [1, 2, 3, 4].map((n) => (
+                  <div key={n} className="h-64 animate-pulse rounded-xl bg-slate-200" />
+                ))
+              : featuredGallery.map((item) => (
+                  <BeforeAfterCard key={item.id} item={item} />
+                ))}
           </div>
         </div>
       </section>
