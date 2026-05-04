@@ -13,6 +13,8 @@ const supabaseKey  = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefine
  * If either variable is missing the client is null, and the gallery hook
  * falls back to the static galleryItems array so the site still renders.
  */
+console.log('[supabase] URL:', supabaseUrl ? 'set' : 'MISSING', '| KEY:', supabaseKey ? 'set' : 'MISSING');
+
 export const supabase =
   supabaseUrl && supabaseKey
     ? createClient(supabaseUrl, supabaseKey)
