@@ -48,4 +48,18 @@ Inside `Layout`, the `<Outlet />` element is the slot where the matched child pa
 
 ## Deployment note
 
-Because we use client-side routing, the host (Vercel, Netlify, etc.) needs to serve `index.html` for every path. Vercel and Netlify do this automatically for Vite projects with no extra config. If you ever self-host or use a different platform, add a rewrite rule that sends all non-asset requests to `/index.html`.
+Because we use client-side routing, the host (Vercel, Netlify, etc.) needs to serve `index.html` for every page path so the React Router can take over. With the addition of the `/api/submit-quote` Vercel serverless function, this project is a **hybrid** (static + functions), which means Vercel no longer applies its default SPA fallback automatically. We have to declare it explicitly via `vercel.json` at the project root:
+
+```json
+{
+  "rewrites": [
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}
+```
+
+The negative-lookahead `(?!api/)` excludes any path under `/api/` so serverless functions still receive their requests directly. Static assets (`/images/...`, `/assets/...`, `/favicon.svg`) are served by Vercel before rewrites are evaluated, so they continue to load normally.
+
+**Symptom if this is missing:** in-app navigation works (clicking links via React Router updates the URL without a real reload), but refreshing on a non-root URL or sharing a deep link returns a 404 because the server doesn't know about routes other than `/`.
+
+If you ever migrate to a different host (Netlify, Cloudflare Pages, etc.), the same SPA fallback concept applies — just expressed in that host's config format. Netlify uses a `_redirects` file with `/* /index.html 200`. Cloudflare Pages auto-detects Vite. Self-hosted nginx needs a `try_files $uri /index.html;` rule.
