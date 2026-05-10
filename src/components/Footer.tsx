@@ -32,6 +32,7 @@ export function Footer() {
               <li><Link to="/services" className="text-slate-700 hover:text-brand">Services</Link></li>
               <li><Link to="/gallery" className="text-slate-700 hover:text-brand">Before & After</Link></li>
               <li><Link to="/reviews" className="text-slate-700 hover:text-brand">Reviews</Link></li>
+              <li><Link to="/leave-review" className="text-slate-700 hover:text-brand">Leave a Review</Link></li>
               <li><Link to="/quote" className="text-slate-700 hover:text-brand">Get a Quote</Link></li>
               <li><Link to="/contact" className="text-slate-700 hover:text-brand">Contact</Link></li>
             </ul>

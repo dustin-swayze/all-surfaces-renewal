@@ -6,7 +6,7 @@ import { ReviewCard } from '../components/ReviewCard';
 import { CTASection } from '../components/CTASection';
 import { StructuredData } from '../components/StructuredData';
 import { services } from '../data/services';
-import { reviews } from '../data/reviews';
+import { useReviews } from '../hooks/useReviews';
 import { useGalleryItems } from '../hooks/useGalleryItems';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -18,6 +18,7 @@ export function Home() {
   });
 
   const featuredServices = services.slice(0, 4);
+  const { reviews } = useReviews();
   const featuredReviews  = reviews.slice(0, 3);
   const hasReviews       = featuredReviews.length > 0;
 

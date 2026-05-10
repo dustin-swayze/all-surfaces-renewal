@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { PageHeader } from '../components/PageHeader';
 import { ReviewCard } from '../components/ReviewCard';
 import { CTASection } from '../components/CTASection';
-import { reviews } from '../data/reviews';
+import { useReviews } from '../hooks/useReviews';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export function Reviews() {
@@ -12,6 +12,7 @@ export function Reviews() {
       'Customer testimonials and reviews for All Surfaces Renewal and Repair — bathtub, tile, and countertop refinishing in the Tri-Cities.',
   });
 
+  const { reviews, loading } = useReviews();
   const hasReviews = reviews.length > 0;
 
   return (
@@ -21,14 +22,22 @@ export function Reviews() {
         title="What customers are saying"
         description={
           hasReviews
-            ? 'Honest feedback from customers whose surfaces we\u2019ve restored.'
-            : 'We\u2019re collecting new testimonials from our customers.'
+            ? 'Honest feedback from customers whose surfaces we’ve restored.'
+            : 'We’re collecting new testimonials from our customers.'
         }
-      />
+      >
+        <Link to="/leave-review" className="btn-accent">
+          Leave a review
+        </Link>
+      </PageHeader>
 
       <section className="section">
         <div className="container-page">
-          {hasReviews ? (
+          {loading && !hasReviews ? (
+            <div className="card mx-auto max-w-2xl p-10 text-center text-sm text-slate-500">
+              Loading reviews…
+            </div>
+          ) : hasReviews ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {reviews.map((review) => (
                 <ReviewCard key={review.id} review={review} />
@@ -59,15 +68,15 @@ function ReviewsComingSoon() {
       </div>
       <h2 className="mt-5 text-2xl font-bold">Testimonials coming soon</h2>
       <p className="mt-3 text-slate-600">
-        We&rsquo;re gathering a fresh set of customer stories to share here. In the meantime,
+        We’re gathering a fresh set of customer stories to share here. In the meantime,
         the quality of our work speaks for itself in the before-and-after gallery.
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-3">
-        <Link to="/gallery" className="btn-primary">
-          See our work
+        <Link to="/leave-review" className="btn-primary">
+          Leave the first review
         </Link>
-        <Link to="/quote" className="btn-secondary">
-          Get a Free Quote
+        <Link to="/gallery" className="btn-secondary">
+          See our work
         </Link>
       </div>
     </div>

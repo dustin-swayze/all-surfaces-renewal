@@ -4,6 +4,7 @@ import { Home } from './pages/Home';
 import { Services } from './pages/Services';
 import { Gallery } from './pages/Gallery';
 import { Reviews } from './pages/Reviews';
+import { LeaveReview } from './pages/LeaveReview';
 import { Quote } from './pages/Quote';
 import { Contact } from './pages/Contact';
 import { NotFound } from './pages/NotFound';
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
       { path: 'services', element: <Services /> },
       { path: 'gallery', element: <Gallery /> },
       { path: 'reviews', element: <Reviews /> },
+      { path: 'leave-review', element: <LeaveReview /> },
       { path: 'quote', element: <Quote /> },
       { path: 'contact', element: <Contact /> },
       { path: '*', element: <NotFound /> },
